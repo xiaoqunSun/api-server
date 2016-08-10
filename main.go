@@ -3,7 +3,6 @@ package main
 import (
 	"io/ioutil"
 	"log"
-	"net/http"
 
 	"github.com/bitly/go-simplejson"
 	"github.com/gin-gonic/gin"
@@ -38,9 +37,7 @@ func main() {
 
 	r.Static("/static", "./static")
 	controllers.HandlerVersions(r)
-	r.POST("/account", func(c *gin.Context) {
-		c.String(200, "param %s %d", c.PostForm("ggg"), http.StatusOK)
-	})
+	controllers.HandlerAccount(r)
 
 	r.Run(":8080")
 }
