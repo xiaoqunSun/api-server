@@ -21,6 +21,7 @@ func HandlerVersions(r *gin.Engine) {
 
 		if err != nil {
 			errorResponse(c, err)
+			return
 		}
 		data := make(gin.H)
 		data["appVersion"] = appVersion
@@ -29,12 +30,14 @@ func HandlerVersions(r *gin.Engine) {
 			var url string
 			if err := rows.Scan(&version); err != nil {
 				errorResponse(c, err)
+				return
 			}
 			url = fmt.Sprintf("%s/%s.zip", static_prfix, version)
 			data[version] = url
 		}
 		if err := rows.Err(); err != nil {
 			errorResponse(c, err)
+			return
 		}
 
 		c.JSON(200, data)
@@ -49,20 +52,28 @@ func HandlerVersions(r *gin.Engine) {
 
 		if err != nil {
 			errorResponse(c, err)
+			return
+
 		}
 		var version int
 		for rows.Next() {
 			if err := rows.Scan(&version); err != nil {
 				errorResponse(c, err)
+				return
+
 			}
 		}
 		if err := rows.Err(); err != nil {
 			errorResponse(c, err)
+			return
+
 		}
 		version = version + 1
 		_, err = db.Query("insert into versions set version = ?, appVersion = ?, created_at = ?", version, appVersion, time.Now())
 		if err != nil {
 			errorResponse(c, err)
+			return
+
 		}
 		c.Status(200)
 
