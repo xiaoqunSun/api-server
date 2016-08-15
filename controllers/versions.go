@@ -53,7 +53,6 @@ func HandlerVersions(r *gin.Engine) {
 		var version int
 		for rows.Next() {
 			if err := rows.Scan(&version); err != nil {
-				d
 				errorResponse(c, err)
 			}
 		}
