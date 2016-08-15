@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"crypto/md5"
+	"encoding/hex"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +24,7 @@ func HandlerAccount(r *gin.Engine) {
 		log.Println("password", password, md5Sum)
 
 		db := mysql.DB()
-		rows, err := db.Query("call sp_registerAccount(?,?)", username, md5Sum[:])
+		rows, err := db.Query("call sp_registerAccount(?,?)", username, hex.EncodeToString(md5Sum[:]))
 		log.Println("rows", rows)
 		var result int
 		defer rows.Close()
