@@ -38,6 +38,6 @@ func main() {
 	r.Static("/static", "./static")
 	controllers.HandlerVersions(r)
 	controllers.HandlerAccount(r)
-
+	controllers.HandlerServerAddr(r)
 	r.Run(":8080")
 }
