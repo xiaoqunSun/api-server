@@ -44,10 +44,10 @@ func HandlerGameReslist(r *gin.Engine) {
 			}
 			cache[gameID] = filelist
 			cacheExpiration[gameID] = time.Now().Add(Cache_Expiration).Unix()
-			data, err := simplejson.NewJson([]byte(filelist))
-			fmt.Println(data, err)
-			c.JSON(200, data)
-		}
 
+		}
+		data, err := simplejson.NewJson([]byte(filelist))
+
+		c.JSON(200, data)
 	})
 }
