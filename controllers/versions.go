@@ -44,6 +44,10 @@ func HandlerVersions(r *gin.Engine) {
 
 	})
 	r.POST("/versions", func(c *gin.Context) {
+		if !validClientIP(c) {
+			errorResponse(c, "此ip地址不允许执行操作，请联系管理员")
+			return
+		}
 		appVersion := c.PostForm("appVersion")
 		log.Println("/version post", appVersion)
 		db := mysql.DB()

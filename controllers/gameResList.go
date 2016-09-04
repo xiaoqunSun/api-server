@@ -38,13 +38,16 @@ func HandlerGameReslist(r *gin.Engine) {
 				return
 			}
 			defer rows.Close()
-
 			for rows.Next() {
 				if err := rows.Scan(&filelist); err != nil {
 					errorResponse(c, err)
 					return
 				}
 				break
+			}
+			if filelist == "" {
+				c.JSON(200, make(gin.H))
+				return
 			}
 			cache[gameID] = filelist
 			cacheExpiration[gameID] = time.Now().Add(Cache_Expiration).Unix()
@@ -56,5 +59,30 @@ func HandlerGameReslist(r *gin.Engine) {
 			return
 		}
 		c.JSON(200, data)
+	})
+
+	r.POST("/gameResList", func(c *gin.Context) {
+		print("post gamereslist")
+		if !validClientIP(c) {
+			errorResponse(c, "此ip地址不允许执行操作，请联系管理员")
+			return
+		}
+		print("post gamereslist2")
+
+		gameID := c.PostForm("gameID")
+		filelist := c.PostForm("filelist")
+		if gameID == "" || filelist == "" {
+			errorResponse(c, "参数无效")
+			return
+		}
+		print(gameID, filelist)
+		db := mysql.DB()
+		rows, err := db.Query("call sp_updateGameResList(?,?)", gameID, filelist)
+		if err != nil {
+			errorResponse(c, err)
+			return
+		}
+		defer rows.Close()
+		c.Status(200)
 	})
 }

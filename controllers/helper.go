@@ -16,3 +16,7 @@ func errorResponse(c *gin.Context, err interface{}) {
 		})
 	}
 }
+
+func validClientIP(c *gin.Context) bool {
+	return true
+}
