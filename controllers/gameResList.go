@@ -33,6 +33,10 @@ func HandlerGameReslist(r *gin.Engine) {
 		if !ok || cacheExpiration[gameID] < time.Now().Unix() {
 			db := mysql.DB()
 			rows, err := db.Query("SELECT filelist FROM gameResList where gameID = ?", gameID)
+			if err != nil {
+				errorResponse(c, err)
+				return
+			}
 			defer rows.Close()
 
 			for rows.Next() {
@@ -47,7 +51,10 @@ func HandlerGameReslist(r *gin.Engine) {
 
 		}
 		data, err := simplejson.NewJson([]byte(filelist))
-
+		if err != nil {
+			errorResponse(c, err)
+			return
+		}
 		c.JSON(200, data)
 	})
 }
