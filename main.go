@@ -39,5 +39,6 @@ func main() {
 	controllers.HandlerVersions(r)
 	controllers.HandlerAccount(r)
 	controllers.HandlerServerAddr(r)
+	controllers.HandlerGameReslist(r)
 	r.Run(":8080")
 }
